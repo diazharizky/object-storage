@@ -1,0 +1,109 @@
+swagger: "2.0"
+info:
+  version: "1.0.0-rc.1"
+  title: "Object Storage's API Docs"
+  contact:
+    email: "diazharizky@gmail.com"
+tags:
+  - name: "buckets"
+    description: "Bucket's CRUD mechanism"
+  - name: "objects"
+    description: "Object's CRUD mechanism"
+schemes:
+  - "http"
+paths:
+  /buckets/{bucket_id}:
+    post:
+      tags:
+        - "buckets"
+      summary: "Create bucket with specified ID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        201:
+          description: "Bucket created"
+        400:
+          description: "Bucket already exists"
+        500:
+          description: "Internal server error"
+  /buckets/{bucket_id}/objects:
+    get:
+      tags:
+        - "objects"
+      summary: "Retrieve object list from specified bucket"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "prefix"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+        404:
+          description: "Bucket not found"
+        500:
+          description: "Internal server error"
+  /buckets/{bucket_id}/objects/{object_id}:
+    get:
+      tags:
+        - "objects"
+      summary: "Retrieve specified object from specified bucket"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "object_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "prefix"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Success"
+        404:
+          description: "Bucket not found"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+        - "objects"
+      summary: "Store specified object to specified bucket"
+      consumes:
+        - "multipart/form-data"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "object_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "object"
+          in: "formData"
+          required: true
+          type: "file"
+        - name: "prefix"
+          in: "query"
+          required: false
+          type: "string"
+      responses:
+        200:
+          description: "Object stored"
+        404:
+          description: "Bucket not found"
+        500:
+          description: "Internal server error"

@@ -1,0 +1,2 @@
+minio:
+  host: OBJECT_STORAGE_MINIO_HOST

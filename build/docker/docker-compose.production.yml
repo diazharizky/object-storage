@@ -1,0 +1,7 @@
+version: "3.4"
+services:
+  object-storage:
+    build:
+      context: ../../
+      dockerfile: ./build/docker/Dockerfile
+    image: ${MY_IMAGE_USER}/${MY_IMAGE_NAME}:${MY_IMAGE_VERSION}

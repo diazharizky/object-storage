@@ -1,0 +1,61 @@
+version: "3.4"
+services:
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+    ports:
+      - 9000:9000
+    environment:
+      - MINIO_ACCESS_KEY=object-storage
+      - MINIO_SECRET_KEY=object-storage
+    command: server /data
+
+  object-storage:
+    restart: unless-stopped
+    depends_on:
+      - minio
+    environment:
+      - OBJECT_STORAGE_MINIO_HOST
+
+  proxy:
+    image: dannydirect/tinyproxy:latest
+    restart: unless-stopped
+    ports:
+      - ${PROXY_PUBLISHED_PORT}:8888
+    command: ANY
+    networks:
+      proxynet:
+      default:
+
+  object-storage-proxy:
+    image: abiosoft/caddy:0.11.1
+    restart: unless-stopped
+    depends_on:
+      - proxy
+      - object-storage
+    environment:
+      CADDY_CONF: |
+        :80 {
+          proxy / object-storage:8080
+        }
+        :443 {
+          tls self_signed
+          proxy / object-storage:8080
+        }
+    entrypoint: /bin/sh
+    command: -c 'echo "$$CADDY_CONF" | caddy -conf stdin'
+    networks:
+      default:
+        aliases:
+          - object-storage.internal
+      proxynet:
+        aliases:
+          - object-storage.internal
+
+networks:
+  proxynet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.16.16.0/24
