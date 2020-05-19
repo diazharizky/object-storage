@@ -7,7 +7,9 @@
     "object-storage": "index.js"
   },
   "scripts": {
-    "test": "npm run object-storage"
+    "object-storage": "node bin/index.js",
+    "pkg": "cross-env NODE_ENV=production npm run nexe",
+    "nexe": "cross-env NEXE_PLATFORM=${NEXE_PLATFORM} NEXE_ARCH=${NEXE_ARCH} NEXE_VERSION=${NEXE_VERSION} node build/nexe/nexe.js"
   },
   "repository": {
     "type": "git",
