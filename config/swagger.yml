@@ -5,9 +5,9 @@ info:
   contact:
     email: "diazharizky@gmail.com"
 tags:
-  - name: "buckets"
+  - name: "bucket"
     description: "Bucket's CRUD mechanism"
-  - name: "objects"
+  - name: "object"
     description: "Object's CRUD mechanism"
 schemes:
   - "http"
@@ -15,7 +15,7 @@ paths:
   /buckets/{bucket_id}:
     post:
       tags:
-        - "buckets"
+        - "bucket"
       summary: "Create bucket with specified ID"
       produces:
         - "application/json"
@@ -34,7 +34,7 @@ paths:
   /buckets/{bucket_id}/objects:
     get:
       tags:
-        - "objects"
+        - "object"
       summary: "Retrieve object list from specified bucket"
       parameters:
         - name: "bucket_id"
@@ -55,7 +55,7 @@ paths:
   /buckets/{bucket_id}/objects/{object_id}:
     get:
       tags:
-        - "objects"
+        - "object"
       summary: "Retrieve specified object from specified bucket"
       parameters:
         - name: "bucket_id"
@@ -79,10 +79,8 @@ paths:
           description: "Internal server error"
     post:
       tags:
-        - "objects"
+        - "object"
       summary: "Store specified object to specified bucket"
-      consumes:
-        - "multipart/form-data"
       parameters:
         - name: "bucket_id"
           in: "path"
@@ -92,10 +90,11 @@ paths:
           in: "path"
           required: true
           type: "string"
-        - name: "object"
-          in: "formData"
+        - name: "body"
+          in: "body"
           required: true
-          type: "file"
+          schema:
+            $ref: "#/definitions/ObjectPayload"
         - name: "prefix"
           in: "query"
           required: false
@@ -107,3 +106,9 @@ paths:
           description: "Bucket not found"
         500:
           description: "Internal server error"
+definitions:
+  ObjectPayload:
+    type: "object"
+    properties:
+      buffer:
+        type: "string"

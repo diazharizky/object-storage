@@ -81,7 +81,7 @@ async function put (req, res) {
   const objectID = !prefix
     ? req.params[params.objectID]
     : prefix + '/' + req.params[params.objectID]
-  const [err] = await core.objects.put(bucketID, objectID, req.file.buffer)
+  const [err] = await core.objects.put(bucketID, objectID, req.body.buffer)
   if (err) {
     log.error({
       msg: err.message,
