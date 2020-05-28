@@ -12,8 +12,8 @@ const client = new minio.Client({
   endPoint: config.get('minio.host'),
   port: 9000,
   useSSL: false,
-  accessKey: 'object-storage',
-  secretKey: 'object-storage'
+  accessKey: config.get('minio.access_key'),
+  secretKey: config.get('minio.secret_key')
 })
 
 exports = module.exports = client
