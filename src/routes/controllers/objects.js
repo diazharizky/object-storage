@@ -3,6 +3,7 @@
 require('../../types')
 const core = require('../../core')
 const log = require('../../utils/log')
+const multiparty = require('multiparty')
 
 const params = (exports.params = {
   bucketID: 'bucket_id',
@@ -76,21 +77,31 @@ exports.list = list
  * @returns {*}
  */
 async function put (req, res) {
-  const bucketID = req.params[params.bucketID]
-  const prefix = req.query[queries.prefix]
-  const objectID = !prefix
-    ? req.params[params.objectID]
-    : prefix + '/' + req.params[params.objectID]
-  const [err] = await core.objects.put(bucketID, objectID, req.body.buffer)
-  if (err) {
-    log.error({
-      msg: err.message,
-      error: err
-    })
-    return res.status(err.statusCode || 500).json({
-      message: err.message || 'internal_server_error'
-    })
-  }
+  console.log(req.body)
+  var form = new multiparty.Form()
+  const body = await form.parse(req)
+  console.log(body)
+  // const buffer = Buffer.from(req.body.buffer.data)
+  // const Duplex = require('stream').Duplex
+  // const stream = new Duplex()
+  // stream.push(buffer)
+  // stream.push(null)
+  // stream.pipe(res)
+  // const bucketID = req.params[params.bucketID]
+  // const prefix = req.query[queries.prefix]
+  // const objectID = !prefix
+  //   ? req.params[params.objectID]
+  //   : prefix + '/' + req.params[params.objectID]
+  // const [err] = await core.objects.put(bucketID, objectID, buffer)
+  // if (err) {
+  //   log.error({
+  //     msg: err.message,
+  //     error: err
+  //   })
+  //   return res.status(err.statusCode || 500).json({
+  //     message: err.message || 'internal_server_error'
+  //   })
+  // }
   res.status(200).json({
     message: 'object_stored'
   })

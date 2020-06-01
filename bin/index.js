@@ -1,22 +1,22 @@
-"use strict";
+'use strict'
 
-const config = require("config");
+const config = require('config')
 /**
  *
  * @type {import('express').Application}
  */
-const app = require("../app");
-const log = require("../src/utils/log");
-const shutdown = require("../src/utils/shutdown");
+const app = require('../app')
+const log = require('../src/utils/log')
+const shutdown = require('../src/utils/shutdown')
 
-module.exports = (function startApp() {
-  const port = config.get("listen_port");
-  const host = config.get("listen_host");
+module.exports = (function startApp () {
+  const port = config.get('listen_port')
+  const host = config.get('listen_host')
   const server = app.listen(port, host, () => {
-    log.info("Listening on " + host + ":" + port + "!");
-  });
-  const listener = shutdown.getListener(server);
+    log.info('Listening on ' + host + ':' + port + '!')
+  })
+  const listener = shutdown.getListener(server)
 
-  process.on("SIGTERM", listener);
-  process.on("SIGINT", listener);
-})();
+  process.on('SIGTERM', listener)
+  process.on('SIGINT', listener)
+})()

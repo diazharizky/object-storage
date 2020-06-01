@@ -1,6 +1,7 @@
 'use strict'
 
 const express = require('express')
+const multer = require('multer')
 
 const router = (module.exports = express.Router())
 const controllers = require('./controllers')
@@ -40,5 +41,6 @@ router.post(
     controllers.objects.params.bucketID,
     controllers.objects.params.objectID
   ),
+  // multer().fields([]),
   controllers.objects.put
 )

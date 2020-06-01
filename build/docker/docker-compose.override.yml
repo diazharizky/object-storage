@@ -5,6 +5,8 @@ services:
       context: ../../
       dockerfile: ./build/docker/Dockerfile
       target: builder
+    ports:
+      - 8081:8080
     image: ${MY_IMAGE_USER}/${MY_IMAGE_NAME}:${MY_IMAGE_VERSION}-dev
     volumes:
       - ../../:/src/app
