@@ -8,7 +8,7 @@ const client = require('./client')
  * @param {import('stream').Stream} stream
  * @returns {Promise}
  */
-function asyncStream (stream) {
+const asyncStream = (stream) => {
   return new Promise((resolve, reject) => {
     const data = []
     stream.on('data', (chunk) => {
@@ -27,7 +27,7 @@ function asyncStream (stream) {
  * @param {string} prefix
  * @returns {MyReturn}
  */
-async function list (bucketID, prefix) {
+const list = async (bucketID, prefix) => {
   let err, res
   try {
     const stream = await client.listObjects(bucketID, prefix)
@@ -45,7 +45,7 @@ exports.list = list
  * @param {string} objectID
  * @returns {MyReturn}
  */
-async function get (bucketID, objectID) {
+const get = async (bucketID, objectID) => {
   let err, res
   try {
     res = await client.getObject(bucketID, objectID)
@@ -62,7 +62,7 @@ exports.get = get
  * @param {string} objectID
  * @param {string|import('stream').Stream|Buffer} stream
  */
-async function put (bucketID, objectID, stream) {
+const put = async (bucketID, objectID, stream) => {
   let err
   try {
     await client.putObject(bucketID, objectID, stream)

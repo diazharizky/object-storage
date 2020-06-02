@@ -11,9 +11,8 @@ const params = (exports.params = {
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
- * @returns {*}
  */
-async function make (req, res) {
+const make = async (req, res) => {
   const bucketID = req.params[params.bucketID]
   const [err] = await core.buckets.make(bucketID)
   if (err) {
@@ -25,6 +24,10 @@ async function make (req, res) {
       message: err.message || 'internal_server_error'
     })
   }
+  log.info({
+    msg: 'bucket_created',
+    data: { bucketID }
+  })
   res.status(201).json({
     message: 'bucket_created'
   })

@@ -10,7 +10,7 @@ const minio = require('../services/minio')
  * @param {string} objectID
  * @returns {MyReturn}
  */
-async function get (bucketID, objectID) {
+const get = async (bucketID, objectID) => {
   let [err, exists] = await minio.buckets.exists(bucketID)
   if (err || !exists) {
     return [err || new MyError(404, 'bucket_not_found')]
@@ -32,7 +32,7 @@ exports.get = get
  * @param {?string} prefix
  * @returns {MyReturn}
  */
-async function list (bucketID, prefix) {
+const list = async (bucketID, prefix) => {
   const [err, exists] = await minio.buckets.exists(bucketID)
   if (err || !exists) {
     return [err || new MyError(404, 'bucket_not_found')]
@@ -48,7 +48,7 @@ exports.list = list
  * @param {string|import('stream').Stream|Buffer} buffer
  * @returns {MyReturn}
  */
-async function put (bucketID, objectID, buffer) {
+const put = async (bucketID, objectID, buffer) => {
   const [err, exists] = await minio.buckets.exists(bucketID)
   if (err || !exists) {
     return [err || new MyError(404, 'bucket_not_found')]

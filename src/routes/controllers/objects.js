@@ -3,7 +3,6 @@
 require('../../types')
 const core = require('../../core')
 const log = require('../../utils/log')
-const multiparty = require('multiparty')
 
 const params = (exports.params = {
   bucketID: 'bucket_id',
@@ -18,9 +17,8 @@ const queries = (exports.queries = {
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
- * @returns {*}
  */
-async function get (req, res) {
+const get = async (req, res) => {
   const bucketID = req.params[params.bucketID]
   const prefix = req.query[queries.prefix]
   const objectID = !prefix
@@ -40,7 +38,15 @@ async function get (req, res) {
       message: err.message || 'internal_server_error'
     })
   }
-  stream.pipe(res)
+  const data = []
+  stream.on('data', (chunk) => {
+    data.push(chunk)
+  })
+  stream.on('end', () => {
+    const buffer = Buffer.concat(data)
+    res.contentType('application/octet-stream')
+    res.send(buffer)
+  })
 }
 exports.get = get
 
@@ -50,7 +56,7 @@ exports.get = get
  * @param {import('express').Response} res
  * @returns {*}
  */
-async function list (req, res) {
+const list = async (req, res) => {
   const bucketID = req.params[params.bucketID]
   let prefix = req.query[queries.prefix]
   if (prefix) {
@@ -76,32 +82,26 @@ exports.list = list
  * @param {import('express').Response} res
  * @returns {*}
  */
-async function put (req, res) {
-  console.log(req.body)
-  var form = new multiparty.Form()
-  const body = await form.parse(req)
-  console.log(body)
-  // const buffer = Buffer.from(req.body.buffer.data)
-  // const Duplex = require('stream').Duplex
-  // const stream = new Duplex()
-  // stream.push(buffer)
-  // stream.push(null)
-  // stream.pipe(res)
-  // const bucketID = req.params[params.bucketID]
-  // const prefix = req.query[queries.prefix]
-  // const objectID = !prefix
-  //   ? req.params[params.objectID]
-  //   : prefix + '/' + req.params[params.objectID]
-  // const [err] = await core.objects.put(bucketID, objectID, buffer)
-  // if (err) {
-  //   log.error({
-  //     msg: err.message,
-  //     error: err
-  //   })
-  //   return res.status(err.statusCode || 500).json({
-  //     message: err.message || 'internal_server_error'
-  //   })
-  // }
+const put = async (req, res) => {
+  const bucketID = req.params[params.bucketID]
+  const prefix = req.query[queries.prefix]
+  const objectID = !prefix
+    ? req.params[params.objectID]
+    : prefix + '/' + req.params[params.objectID]
+  const [err] = await core.objects.put(bucketID, objectID, req.file.buffer)
+  if (err) {
+    log.error({
+      msg: err.message,
+      error: err
+    })
+    return res.status(err.statusCode || 500).json({
+      message: err.message || 'internal_server_error'
+    })
+  }
+  log.info({
+    msg: 'object_stored',
+    data: { bucketID, prefix, objectID }
+  })
   res.status(200).json({
     message: 'object_stored'
   })

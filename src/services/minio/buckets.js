@@ -8,7 +8,7 @@ const client = require('./client')
  * @param {string} bucketID
  * @returns {MyReturn}
  */
-async function exists (bucketID) {
+const exists = async (bucketID) => {
   let err, exists
   try {
     exists = await client.bucketExists(bucketID)
@@ -24,7 +24,7 @@ exports.exists = exists
  * @param {string} bucketID
  * @returns {MyReturn}
  */
-async function make (bucketID) {
+const make = async (bucketID) => {
   let err
   try {
     await client.makeBucket(bucketID)

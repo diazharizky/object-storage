@@ -1,10 +1,6 @@
 'use strict'
 
 const config = require('config')
-/**
- *
- * @type {import('express').Application}
- */
 const app = require('../app')
 const log = require('../src/utils/log')
 const shutdown = require('../src/utils/shutdown')

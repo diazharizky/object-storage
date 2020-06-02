@@ -9,7 +9,7 @@
   "scripts": {
     "object-storage": "node bin/index.js",
     "pkg": "cross-env NODE_ENV=production npm run nexe",
-    "nexe": "cross-env NEXE_PLATFORM=${NEXE_PLATFORM} NEXE_ARCH=${NEXE_ARCH} NEXE_VERSION=${NEXE_VERSION} node build/nexe/nexe.js"
+    "nexe": "cross-env NEXE_PLATFORM=${NEXE_PLATFORM} NEXE_ARCH=${NEXE_ARCH} NEXE_VERSION=${NEXE_VERSION} node build/nexe/config.js"
   },
   "repository": {
     "type": "git",
@@ -41,11 +41,9 @@
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
     "express": "^4.17.1",
-    "express-form-data": "^2.0.13",
     "js-yaml": "^3.13.1",
     "minio": "^7.0.16",
     "multer": "^1.4.2",
-    "multiparty": "^4.2.1",
     "pino": "^6.2.1",
     "swagger-ui-express": "^4.1.4"
   }
