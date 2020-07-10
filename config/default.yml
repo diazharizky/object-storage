@@ -2,5 +2,5 @@ minio:
   host: localhost
   access_key: object-storage
   secret_key: object-storage
-listen_port: 8080
+listen_port: 80
 listen_host: 0.0.0.0

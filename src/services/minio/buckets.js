@@ -17,7 +17,6 @@ const exists = async (bucketID) => {
   }
   return [err, exists]
 }
-exports.exists = exists
 
 /**
  *
@@ -33,4 +32,35 @@ const make = async (bucketID) => {
   }
   return [err]
 }
-exports.make = make
+
+/**
+ *
+ * @param {string} bucketID
+ * @returns {MyReturn}
+ */
+const getPolicy = async (bucketID) => {
+  let err, res
+  try {
+    res = await client.getBucketPolicy(bucketID)
+  } catch (e) {
+    err = e
+  }
+  return [err, res]
+}
+
+/**
+ *
+ * @param {string} bucketID
+ * @param {string} policy
+ */
+const setPolicy = async (bucketID, policy) => {
+  let err
+  try {
+    await client.setBucketPolicy(bucketID, policy)
+  } catch (e) {
+    err = e
+  }
+  return [err]
+}
+
+exports = module.exports = { exists, make, getPolicy, setPolicy }

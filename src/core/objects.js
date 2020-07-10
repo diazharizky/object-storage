@@ -46,13 +46,17 @@ exports.list = list
  * @param {string} bucketID
  * @param {string} objectID
  * @param {string|import('stream').Stream|Buffer} buffer
+ * @param {number} size
+ * @param {object} metadata
  * @returns {MyReturn}
  */
-const put = async (bucketID, objectID, buffer) => {
+const put = async (bucketID, objectID, buffer, size, metadata) => {
   const [err, exists] = await minio.buckets.exists(bucketID)
   if (err || !exists) {
     return [err || new MyError(404, 'bucket_not_found')]
   }
-  return minio.objects.put(bucketID, objectID, buffer)
+  return minio.objects.put(bucketID, objectID, buffer, size, metadata)
 }
 exports.put = put
+
+exports = module.exports = { get, list, put }

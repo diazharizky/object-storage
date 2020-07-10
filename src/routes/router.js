@@ -16,6 +16,14 @@ router.post(
   getBucketPath(controllers.buckets.params.bucketID),
   controllers.buckets.make
 )
+router.get(
+  getBucketPath(controllers.buckets.params.bucketID) + '/policy',
+  controllers.buckets.getPolicy
+)
+router.post(
+  getBucketPath(controllers.buckets.params.bucketID) + '/policy',
+  controllers.buckets.setPolicy
+)
 
 function getObjectPath (bucketID, objectID) {
   const basePath = getBucketPath(bucketID) + '/objects'

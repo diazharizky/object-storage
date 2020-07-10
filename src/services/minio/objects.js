@@ -61,11 +61,13 @@ exports.get = get
  * @param {string} bucketID
  * @param {string} objectID
  * @param {string|import('stream').Stream|Buffer} stream
+ * @param {number} size
+ * @param {object} metadata
  */
-const put = async (bucketID, objectID, stream) => {
+const put = async (bucketID, objectID, stream, size, metadata) => {
   let err
   try {
-    await client.putObject(bucketID, objectID, stream)
+    await client.putObject(bucketID, objectID, stream, size, metadata)
   } catch (e) {
     err = e
   }

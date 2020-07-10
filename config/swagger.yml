@@ -31,6 +31,48 @@ paths:
           description: "Bucket already exists"
         500:
           description: "Internal server error"
+  /buckets/{bucket_id}/policy:
+    get:
+      tags:
+        - "bucket"
+      summary: "Get bucket's policy with specified ID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+      responses:
+        200:
+          description: "Bucket's policy retrieved"
+        400:
+          description: "Bucket already exists"
+        500:
+          description: "Internal server error"
+    post:
+      tags:
+        - "bucket"
+      summary: "Create/update bucket's policy with specified ID"
+      produces:
+        - "application/json"
+      parameters:
+        - name: "bucket_id"
+          in: "path"
+          required: true
+          type: "string"
+        - name: "body"
+          in: "body"
+          required: true
+          schema:
+            $ref: "#/definitions/PolicyPayload"
+      responses:
+        204:
+          description: "Bucket's policy updated"
+        400:
+          description: "Bucket already exists"
+        500:
+          description: "Internal server error"
   /buckets/{bucket_id}/objects:
     get:
       tags:
@@ -72,6 +114,11 @@ paths:
           in: "query"
           required: false
           type: "string"
+        - name: "type"
+          in: "query"
+          required: false
+          type: "string"
+          description: "The content type of response data"
       responses:
         200:
           description: "Success"
@@ -115,8 +162,32 @@ paths:
         500:
           description: "Internal server error"
 definitions:
-  ObjectPayload:
+  PolicyPayload:
     type: "object"
     properties:
-      buffer:
+      policy:
+        type: "object"
+        properties:
+          Version:
+            type: string
+          Statement:
+            type: array
+            items:
+              $ref: "#/definitions/StatementItem"
+  StatementItem:
+    type: object
+    properties:
+      Sid:
         type: "string"
+      Effect:
+        type: "string"
+      Principal:
+        type: "object"
+      Action:
+        type: "array"
+        items:
+          type: string
+      Resource:
+        type: "array"
+        items:
+          type: string

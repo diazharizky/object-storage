@@ -10,7 +10,8 @@ const params = (exports.params = {
 })
 
 const queries = (exports.queries = {
-  prefix: 'prefix'
+  prefix: 'prefix',
+  type: 'type'
 })
 
 /**
@@ -24,6 +25,7 @@ const get = async (req, res) => {
   const objectID = !prefix
     ? req.params[params.objectID]
     : prefix + '/' + req.params[params.objectID]
+  const contentType = req.query[queries.type] || 'application/octet-stream'
   /**
    *
    * @type {[ErrorKind, import('stream').Stream]}
@@ -44,7 +46,7 @@ const get = async (req, res) => {
   })
   stream.on('end', () => {
     const buffer = Buffer.concat(data)
-    res.contentType('application/octet-stream')
+    res.contentType(contentType)
     res.send(buffer)
   })
 }
@@ -88,7 +90,16 @@ const put = async (req, res) => {
   const objectID = !prefix
     ? req.params[params.objectID]
     : prefix + '/' + req.params[params.objectID]
-  const [err] = await core.objects.put(bucketID, objectID, req.file.buffer)
+  const size = req.file.size
+  const [err] = await core.objects.put(
+    bucketID,
+    objectID,
+    req.file.buffer,
+    size,
+    {
+      'Content-Type': req.file.mimetype
+    }
+  )
   if (err) {
     log.error({
       msg: err.message,

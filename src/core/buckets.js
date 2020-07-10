@@ -16,7 +16,6 @@ const make = async (bucketID) => {
   }
   return minio.buckets.make(bucketID)
 }
-exports.make = make
 
 /**
  *
@@ -24,4 +23,20 @@ exports.make = make
  * @returns {MyReturn}
  */
 const exists = async (bucketID) => minio.buckets.exists(bucketID)
-exports.exists = exists
+
+/**
+ *
+ * @param {string} bucketID
+ * @returns {MyReturn}
+ */
+const getPolicy = async (bucketID) => minio.buckets.getPolicy(bucketID)
+
+/**
+ *
+ * @param {string} bucketID
+ * @param {string} policy
+ */
+const setPolicy = async (bucketID, policy) =>
+  minio.buckets.setPolicy(bucketID, policy)
+
+exports = module.exports = { make, exists, getPolicy, setPolicy }
