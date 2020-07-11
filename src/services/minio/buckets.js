@@ -52,6 +52,7 @@ const getPolicy = async (bucketID) => {
  *
  * @param {string} bucketID
  * @param {string} policy
+ * @returns {MyReturn}
  */
 const setPolicy = async (bucketID, policy) => {
   let err

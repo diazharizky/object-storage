@@ -2,10 +2,10 @@
 
 const express = require('express')
 const multer = require('multer')
-const router = (module.exports = express.Router())
 const controllers = require('./controllers')
+const router = (module.exports = express.Router())
 
-function getBucketPath (bucketID) {
+const getBucketPath = (bucketID) => {
   const basePath = '/buckets'
   if (!bucketID) {
     return basePath
@@ -16,16 +16,13 @@ router.post(
   getBucketPath(controllers.buckets.params.bucketID),
   controllers.buckets.make
 )
-router.get(
-  getBucketPath(controllers.buckets.params.bucketID) + '/policy',
-  controllers.buckets.getPolicy
-)
-router.post(
-  getBucketPath(controllers.buckets.params.bucketID) + '/policy',
-  controllers.buckets.setPolicy
-)
 
-function getObjectPath (bucketID, objectID) {
+const bucketPolicyPath =
+  getBucketPath(controllers.buckets.params.bucketID) + '/policy'
+router.get(bucketPolicyPath, controllers.buckets.getPolicy)
+router.post(bucketPolicyPath, controllers.buckets.setPolicy)
+
+const getObjectPath = (bucketID, objectID) => {
   const basePath = getBucketPath(bucketID) + '/objects'
   if (!objectID) {
     return basePath

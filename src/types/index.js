@@ -4,6 +4,6 @@
  **/
 
 /**
- * Custom return values
+ * Custom return value
  * @typedef {[ErrorKind, ?*]} MyReturn
  */

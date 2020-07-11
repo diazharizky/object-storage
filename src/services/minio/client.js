@@ -15,4 +15,5 @@ const client = new minio.Client({
   accessKey: config.get('minio.access_key'),
   secretKey: config.get('minio.secret_key')
 })
+
 exports = module.exports = client

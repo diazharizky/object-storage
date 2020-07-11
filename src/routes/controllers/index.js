@@ -1,2 +1,4 @@
-exports.buckets = require('./buckets')
-exports.objects = require('./objects')
+exports = module.exports = {
+  buckets: require('./buckets'),
+  objects: require('./objects')
+}

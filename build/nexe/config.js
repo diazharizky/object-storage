@@ -4,7 +4,11 @@ require('nexe')
   .compile({
     input: './bin/index.js',
     output: './.bin/object-storage',
-    resources: ['node_modules/js-yaml/index.js', 'config/swagger.yml'],
+    resources: [
+      'node_modules/js-yaml/index.js',
+      'config/swagger.yml',
+      'index.html'
+    ],
     targets: {
       platform: process.env.NEXE_PLATFORM,
       arch: process.env.NEXE_ARCH,

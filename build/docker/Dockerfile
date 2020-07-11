@@ -20,9 +20,10 @@ RUN apk add --no-cache git build-base python bash
 # install nodemon
 RUN npm install -g nodemon
 
+# update npm
 RUN npm install -g npm@latest
 
-# Copy the rest of the source code and package it into one executable file
+# copy whole source code and executablize it
 WORKDIR /src/app
 COPY . .
 RUN npm install
@@ -37,11 +38,11 @@ RUN \
     apk update &&\
     apk add --no-cache libstdc++ libgcc su-exec
 
-ENV NODE_CONFIG_DIR /etc/object-storage
-
 # copy config folder
+ENV NODE_CONFIG_DIR /etc/object-storage
 COPY ./config ${NODE_CONFIG_DIR}
 
+# copy the compiled one
 COPY --from=builder /src/app/.bin/object-storage /usr/local/bin/object-storage
 
 ENTRYPOINT [ "/usr/local/bin/object-storage" ]

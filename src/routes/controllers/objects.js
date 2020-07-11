@@ -4,15 +4,15 @@ require('../../types')
 const core = require('../../core')
 const log = require('../../utils/log')
 
-const params = (exports.params = {
+const params = {
   bucketID: 'bucket_id',
   objectID: 'object_id'
-})
+}
 
-const queries = (exports.queries = {
+const queries = {
   prefix: 'prefix',
   type: 'type'
-})
+}
 
 /**
  *
@@ -41,22 +41,18 @@ const get = async (req, res) => {
     })
   }
   const data = []
-  stream.on('data', (chunk) => {
-    data.push(chunk)
-  })
+  stream.on('data', (chunk) => data.push(chunk))
   stream.on('end', () => {
     const buffer = Buffer.concat(data)
     res.contentType(contentType)
     res.send(buffer)
   })
 }
-exports.get = get
 
 /**
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
- * @returns {*}
  */
 const list = async (req, res) => {
   const bucketID = req.params[params.bucketID]
@@ -76,13 +72,11 @@ const list = async (req, res) => {
   }
   res.status(200).json({ data })
 }
-exports.list = list
 
 /**
  *
  * @param {import('express').Request} req
  * @param {import('express').Response} res
- * @returns {*}
  */
 const put = async (req, res) => {
   const bucketID = req.params[params.bucketID]
@@ -90,15 +84,16 @@ const put = async (req, res) => {
   const objectID = !prefix
     ? req.params[params.objectID]
     : prefix + '/' + req.params[params.objectID]
-  const size = req.file.size
+  const { buffer, size } = req.file
+  const metadata = {
+    'Content-Type': req.file.mimetype
+  }
   const [err] = await core.objects.put(
     bucketID,
     objectID,
-    req.file.buffer,
+    buffer,
     size,
-    {
-      'Content-Type': req.file.mimetype
-    }
+    metadata
   )
   if (err) {
     log.error({
@@ -111,10 +106,11 @@ const put = async (req, res) => {
   }
   log.info({
     msg: 'object_stored',
-    data: { bucketID, prefix, objectID }
+    data: { bucketID, objectID, prefix, metadata }
   })
   res.status(200).json({
     message: 'object_stored'
   })
 }
-exports.put = put
+
+exports = module.exports = { params, queries, get, list, put }

@@ -2,12 +2,13 @@
 
 require('./src/types')
 const express = require('express')
-const swaggerUI = require('swagger-ui-express')
+const path = require('path')
 const bodyParser = require('body-parser')
-const app = (module.exports = express())
+const swaggerUI = require('swagger-ui-express')
 const swaggerDocument = require('js-yaml').load(
   require('fs').readFileSync('./config/swagger.yml', 'utf8')
 )
+const app = (module.exports = express())
 
 app.use(bodyParser.json({ limit: '50mb' }))
 app.use(
@@ -18,7 +19,10 @@ app.use(
   })
 )
 app.use(require('./src/routes/router'))
-app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+app.use('/', (req, res) =>
+  res.status(501).sendFile(path.join(__dirname, '/index.html'))
+)
 
 /**
  *

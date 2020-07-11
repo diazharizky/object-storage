@@ -37,7 +37,6 @@ const list = async (bucketID, prefix) => {
   }
   return [err, res]
 }
-exports.list = list
 
 /**
  *
@@ -54,7 +53,6 @@ const get = async (bucketID, objectID) => {
   }
   return [err, res]
 }
-exports.get = get
 
 /**
  *
@@ -73,4 +71,5 @@ const put = async (bucketID, objectID, stream, size, metadata) => {
   }
   return [err]
 }
-exports.put = put
+
+exports = module.exports = { list, get, put }

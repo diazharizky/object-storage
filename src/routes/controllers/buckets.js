@@ -1,5 +1,6 @@
 'use strict'
 
+require('../../types')
 const core = require('../../core')
 const log = require('../../utils/log')
 
@@ -51,7 +52,7 @@ const getPolicy = async (req, res) => {
     })
   }
   res.status(200).json({
-    data
+    data: JSON.parse(data)
   })
 }
 
@@ -74,11 +75,11 @@ const setPolicy = async (req, res) => {
     })
   }
   log.info({
-    msg: 'bucket_policy_updated',
-    data: { bucketID, policy }
+    msg: 'bucket_policy_created/updated',
+    data: { bucketID, policy: JSON.parse(policy) }
   })
   res.status(204).json({
-    message: 'bucket_policy_updated'
+    message: 'bucket_policy_created/updated'
   })
 }
 

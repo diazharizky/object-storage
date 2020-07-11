@@ -1,14 +1,14 @@
 swagger: "2.0"
 info:
-  version: "1.0.0-rc.1"
+  version: "1.0.0-rc.2"
   title: "Object Storage's API Docs"
   contact:
     email: "diazharizky@gmail.com"
 tags:
   - name: "bucket"
-    description: "Bucket's CRUD mechanism"
+    description: "Bucket's features and functions"
   - name: "object"
-    description: "Object's CRUD mechanism"
+    description: "Object's features and functions"
 schemes:
   - "http"
 paths:
@@ -177,12 +177,18 @@ definitions:
   StatementItem:
     type: object
     properties:
-      Sid:
-        type: "string"
       Effect:
         type: "string"
       Principal:
         type: "object"
+        properties:
+          prop1:
+            type: "array"
+            items:
+              type: "string"
+          prop2:
+            items:
+              type: "string"
       Action:
         type: "array"
         items:

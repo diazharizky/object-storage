@@ -8,7 +8,6 @@ const minio = require('../services/minio')
  *
  * @param {string} bucketID
  * @param {string} objectID
- * @returns {MyReturn}
  */
 const get = async (bucketID, objectID) => {
   let [err, exists] = await minio.buckets.exists(bucketID)
@@ -24,13 +23,11 @@ const get = async (bucketID, objectID) => {
   }
   return [null, res]
 }
-exports.get = get
 
 /**
  *
  * @param {string} bucketID
  * @param {?string} prefix
- * @returns {MyReturn}
  */
 const list = async (bucketID, prefix) => {
   const [err, exists] = await minio.buckets.exists(bucketID)
@@ -39,7 +36,6 @@ const list = async (bucketID, prefix) => {
   }
   return minio.objects.list(bucketID, prefix)
 }
-exports.list = list
 
 /**
  *
@@ -48,7 +44,6 @@ exports.list = list
  * @param {string|import('stream').Stream|Buffer} buffer
  * @param {number} size
  * @param {object} metadata
- * @returns {MyReturn}
  */
 const put = async (bucketID, objectID, buffer, size, metadata) => {
   const [err, exists] = await minio.buckets.exists(bucketID)
@@ -57,6 +52,5 @@ const put = async (bucketID, objectID, buffer, size, metadata) => {
   }
   return minio.objects.put(bucketID, objectID, buffer, size, metadata)
 }
-exports.put = put
 
 exports = module.exports = { get, list, put }
